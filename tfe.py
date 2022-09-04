@@ -2,7 +2,7 @@
 This is a little tar files explorer in python with tkinter.
 
 It allows :
-    - to preview images contained in a tar file 
+    - to preview images contained in a tar file
     - extract files or subdirectory of the given tar file
 
 Due to the image preview feature, it requires the PIL dependency.
@@ -13,6 +13,8 @@ Due to the image preview feature, it requires the PIL dependency.
 >>> python tfe.py file.tar
 ```
 """
+
+
 import os
 import sys
 import tarfile
@@ -24,10 +26,11 @@ import subprocess
 from tkinter import messagebox
 from collections import defaultdict
 
-from PIL import Image, ImageTk 
+from PIL import Image, ImageTk
 
 
 DELIMITER = os.path.sep
+
 
 def system_viewer(filepath: str):
     """
@@ -42,7 +45,7 @@ def system_viewer(filepath: str):
     else:
         # linux variants
         subprocess.call(('xdg-open', filepath))
-    
+
 
 class TarFileExplorer:
     def __init__(self, tar_filename: str):
@@ -56,13 +59,9 @@ class TarFileExplorer:
         for parent, path_file in zip(tar_parents, tar_files_pathes):
             self.tree_dict[parent].append(path_file)
 
-
         self.tmpdir = tempfile.TemporaryDirectory()
-
         self.current_path = ''
         self.opened_at_least_one_tmp = False
-
-
 
         self.window = tk.Tk()
         self.window.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -72,11 +71,9 @@ class TarFileExplorer:
         tk.Grid.rowconfigure(self.window, 0, weight=1)
         self.listbox.grid(row=0, column=0, sticky="nsew")
 
-
         self.listbox.bind('<Double-Button>', self.dbl_click_listbox)
         self.listbox.bind('<Return>', self.dbl_click_listbox)
         self.listbox.bind('<<ListboxSelect>>', self.click_listbox)
-
 
         self.cv = tk.Canvas(self.window)
         self.cv.bind('<Double-Button>', self.extract_selection)
@@ -198,12 +195,8 @@ class TarFileExplorer:
         self.window.mainloop() 
 
 
-
 if __name__ == "__main__":
     # Execute like if it was lanched from the current dir (to better find relative pathes)
     os.chdir(os.getcwd())
     te = TarFileExplorer(tar_filename=sys.argv[1])
     te.mainloop()
-
-
-
